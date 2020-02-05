@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.sass';
-import { Container } from '@material-ui/core'
+import { Container, Button } from '@material-ui/core'
 import Game from './pages/game';
 import Home from './pages/home';
 import {
@@ -19,10 +19,16 @@ function App() {
           <nav>
             <ul>
               <li>
-                <Link to="/">Главная</Link>
+                <Link to="/">
+                  <Button variant="contained" color="primary" href="#contained-buttons">
+                    Главная
+                  </Button>
+                </Link>
               </li>
               <li>
-                <Link to="/pages/game">Игра</Link>
+                <Button variant="contained" color="primary" href="#contained-buttons">
+                  <Link to="/pages/game">Игра</Link>
+                </Button>
               </li>
             </ul>
           </nav>
