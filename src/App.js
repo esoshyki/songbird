@@ -4,6 +4,7 @@ import './App.sass';
 import { Container, Button } from '@material-ui/core'
 import Game from './pages/game';
 import Home from './pages/home';
+import AddToDataBase from './pages/addtodatabase';
 import {
   BrowserRouter as Router,
   Switch,
@@ -30,11 +31,21 @@ function App() {
                   <Link to="/pages/game">Игра</Link>
                 </Button>
               </li>
+              <li>
+                <Link to="/pages/addtodatabase">
+                  <Button variant="contained" color="primary">
+                    База данных
+                  </Button>
+                </Link>
+              </li>
             </ul>
           </nav>
         </header>
         <main>
           <Switch>
+            <Route path="/pages/addtodatabase">
+              <AddToDataBase />
+            </Route>
             <Route path="/pages/game">
               <Game />
             </Route>
