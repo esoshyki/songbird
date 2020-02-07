@@ -34,8 +34,8 @@ function App() {
                   <Link to="/pages/game">Игра</Link>
                 </Button>
               </li>
-                { round ? 
-              <li><h3>Score <span>{score}</span>  Round <span>{round}</span></h3>
+                { (round || score) ? 
+              <li><h3>Score <span>{score}</span>  Round <span>{round !== 0 ? round : 1}</span></h3>
               </li>
                : ''}
             </ul>
