@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.sass';
 import { Container, Button } from '@material-ui/core'
@@ -12,6 +12,10 @@ import {
 } from "react-router-dom";
 
 function App() {
+
+  const [score, setScore] = useState(0);
+  const [round, setRound] = useState(0);
+
   return (
     <Router>
       <Container fixed>
@@ -30,13 +34,17 @@ function App() {
                   <Link to="/pages/game">Игра</Link>
                 </Button>
               </li>
+                { round ? 
+              <li><h3>Score <span>{score}</span>  Round <span>{round}</span></h3>
+              </li>
+               : ''}
             </ul>
           </nav>
         </header>
         <main>
           <Switch>
             <Route path="/pages/game">
-              <Game />
+              <Game setScore={setScore} setRound={setRound} round={round} score={score}/>
             </Route>
             <Route path="/">
               <Home />
