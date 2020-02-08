@@ -4,9 +4,7 @@ import './AudioPlayer.sass';
 export default function AudioPlayer(props) {
     return (
         <div className='audio-player'>
-            <audio controls>
-                <source src={props.audio} />
-            </audio>
+            <audio controls src={props.audio} />
         </div>
     )
 }
