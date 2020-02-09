@@ -79,7 +79,6 @@ export default function Home(props) {
 
 	return (
     <Grid container component="main" className={classes.root}>
-      {/* <CssBaseline /> */}
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square className={classes.paperGrid} >
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>

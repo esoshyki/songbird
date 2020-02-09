@@ -37,14 +37,20 @@ function App() {
   const classes = useStyles({})
 
   const [score, setScore] = useState(0);
-  const [round, setRound] = useState(1);
+  const [round, setRound] = useState(0);
   const [gamer, setGamer] = useState();
- 
+  
+  const handleClick = () => {
+    setScore(0);
+    setRound(0);
+    setGamer(undefined)
+  }
+
   return (
     <Router>
       <Container fixed>
         <header className={classes.header}>
-          <Link to="/">
+          <Link to="/" onClick={handleClick}>
             <div className={classes.headerIcon} />
           </Link>
         </header>

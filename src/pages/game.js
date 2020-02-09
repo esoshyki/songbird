@@ -1,23 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@material-ui/core'
 import DataService from '../services/dataService';
 import CheckListLabel from './game_components/CheckListLabel';
 import HeroInformation from './game_components/HeroInformation';
-import AudioPlayer from './game_components/AudioPlayer'
+import AudioPlayer from './game_components/AudioPlayer';
+import Answer from './game_components/Answer'
 import { makeStyles } from '@material-ui/core/styles'
 import { Redirect } from 'react-router-dom'
 import './game.sass'
 const dataService = new DataService();
 
 const roles = {
-	strength: 'strength',
-	agility: 'agility',
-	magic: 'magic',
-	carry: 'carry',
-	support: 'support',
-	forrest: 'forrest',
-	midlane: 'midlane',
-	hardlane: 'hardlane'
+	1: 'strength',
+	2: 'agility',
+	3: 'magic',
+	4: 'carry',
+	5: 'support',
+	6: 'forrest',
+	7: 'midlane',
+	8: 'hardlane'
 }
 
 const answers = {
@@ -54,84 +55,140 @@ const useStyles = makeStyles({
 		color: 'green',
 		fontSize: '1.2rem',
 		textAlign: 'center'
+	},
+	levelTitle: {
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'center',
+		alignItems: 'center',
+		padding: '0 10px',
+		backgroundColor: '#008966',
+		color: 'white',
+		minWidth: '100px',
+		height: '30px',
+		lineHeight: '0'
+	},
+		currentLevelTitle: {
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'center',
+		alignItems: 'center',
+		padding: '0 10px',
+		backgroundColor: '#00bc8c',
+		color: 'white',
+		minWidth: '100px',
+		height: '30px',
+		lineHeight: '0'
+	},
+	nextRoundButton: {
+		backgroundColor: '#4caf50',
+		color: 'white'
+	},
+	wrongAnswer: {
+		color: 'red',
+		opacity: '0.5'
+	},
+	rightAnswer: {
+		color: 'green'
+	},
+	disabledButton: {
+		opacity: 0.2
 	}
+
 })
+
+
+const classesStatus = {
+    noAnswer: 'no-answer',
+    wrongAnswer: 'wrong-answer',
+    rightAnswer: 'right-answer',
+}
+
 
 export default function Game(props) {
 
 	const classes = useStyles({})
 
-	const [role, setRole] = useState()
 	const [randomHeroes, setRandomHeroes] = useState()
 	const [choosedHero, setChosedHero] = useState(false);
 	const [secretHero, setSecretHero] = useState();
-	const [roundNotFinished, setRoundNotFinished] = useState(true);
-	const [answer, setAnswer ] = useState();
 	const [sound, setSound ] = useState();
 	const [redirect, setRedirect] = useState(false);
-
+	const [answer, setAnswer] = useState(null)
+	const [roundFinished, setRoundFinished] = useState(true)
+ 
 	const chooseSecretHero = () => Math.floor(Math.random() * 5)
 
-	const handleButtonClick = (role) => {
-		const heroes = dataService.getRandomHeroes(role);
+	const startNewLvL = () => {
+		const round = props.round + 1;
+		const heroes = dataService.getRandomHeroes(roles[round]);
 		const secretID = chooseSecretHero();
-		setChosedHero(false)
-		setRole(role);
+		props.setRound(round);
 		setRandomHeroes(heroes);
 		setSecretHero(secretID);
 		setSound(heroes[secretID].sound)
 		setAnswer(null)
-		if (roundNotFinished === false) {
-			props.setRound(props.round + 1);
-		}
-	    setRoundNotFinished(true)
+		setRoundFinished(false)
 	}
 
-	const handleLabelClick = (event) => {
-	}
-
-	const getAnswer = () => {
-		const answer = choosedHero === secretHero
-		answer ? props.setScore(props.score + 15) : props.setScore(props.score - 15);
-		setRoundNotFinished(false)
-		setAnswer(answer ? answers.right : answers.fail);
-		console.log(redirect);
-		console.log(props.round)
-		if (props.round >= 10) {
-			setRedirect(true)
+	const handleAnswer = (hero) => {
+		setChosedHero(hero);
+		if (hero == secretHero) {
+			setAnswer(answers.right)
+			setRoundFinished(true)
+			props.setScore(props.score+5)
+		}
+		else {
+			setAnswer(answers.fail)
+			props.setScore(props.score-5)
 		}
 	}
+
+	const NextRoundButton = () => {
+		return (
+			<Button 
+		  variant="contained"
+			color="primary"
+			onClick={roundFinished ? startNewLvL : null}
+			className={roundFinished ? null : classes.disabledButton}>
+				Start next round
+			</Button>
+		)
+	}
+
 	return (redirect) ? <Redirect to='/pages/finishGame' /> : (
 		<div className={classes.root}>
 			<div className='game-header'>
-				<Button variant="contained" color="primary" onClick={() => handleButtonClick(roles.strength)}>Силовики</Button>
-				<Button variant="contained" color="primary" onClick={() => handleButtonClick(roles.agility)}>Ловкачи</Button>
-				<Button variant="contained" color="primary" onClick={() => handleButtonClick(roles.magic)}>Маги</Button>
-				<Button variant="contained" color="primary" onClick={() => handleButtonClick(roles.carry)}>Керри</Button>
-				<Button variant="contained" color="primary" onClick={() => handleButtonClick(roles.support)}>Саппорты</Button>
-				<Button variant="contained" color="primary" onClick={() => handleButtonClick(roles.midlane)}>Мидеры</Button>
-				<Button variant="contained" color="primary" onClick={() => handleButtonClick(roles.hardlane)}>Хардлайнеры</Button>
-				<Button variant="contained" color="primary" onClick={() => handleButtonClick(roles.forrest)}>Лесники</Button>
+				<div className={props.round === 1 ? classes.currentLevelTitle : classes.levelTitle}>Силовики</div>
+				<div className={props.round === 2 ? classes.currentLevelTitle : classes.levelTitle}>Ловкачи</div>
+				<div className={props.round === 3 ? classes.currentLevelTitle : classes.levelTitle}>Маги</div>
+				<div className={props.round === 4 ? classes.currentLevelTitle : classes.levelTitle}>Керри</div>
+				<div className={props.round === 5 ? classes.currentLevelTitle : classes.levelTitle}>Саппорты</div>
+				<div className={props.round === 6 ? classes.currentLevelTitle : classes.levelTitle}>Мидеры</div>
+				<div className={props.round === 7 ? classes.currentLevelTitle : classes.levelTitle}>Хардлайнеры</div>
+				<div className={props.round === 8 ? classes.currentLevelTitle : classes.levelTitle}>Лесники</div>
 			</div>
 			<div className={classes.gameInfo}>
 				<div >Player: <span className={classes.playerAndRound}>{props.gamer}</span></div>
 				<div >Round: <span className={classes.playerAndRound}>{props.round}</span></div>
 				<div >Score: <span className={props.score >= 0 ? classes.positiveScore : classes.negativeScore}>{props.score}</span></div>
 			</div>
-			{!roundNotFinished ? 
-				<div className={classes.nextRoundLabel}>
-					Для начала следующего раунда, жмякай на любой раздел геров
-				</div>
-			: ''}
+			<NextRoundButton 
+
+			/>
 			<div className='game'>
-				<div onClick={handleLabelClick}>
-				{(randomHeroes && roundNotFinished) ? randomHeroes.map((hero, idx) => (
+				<div>
+				{(randomHeroes) ? randomHeroes.map((hero, idx) => (
 					<CheckListLabel 
 						name={hero.name} 
 						image={hero.image} 
 						key={idx.toString()} 
 						index={idx} 
-						setChosedHero={setChosedHero}
+						handleAnswer={handleAnswer}
+						choosedHero={choosedHero}
+						secretHero={secretHero}
+						roundFinished={roundFinished}
+						round={props.round}
 						/>
 				)) : null}
 				</div>
@@ -141,28 +198,7 @@ export default function Game(props) {
 						<AudioPlayer audio={sound}/> : ''
 						}
 					<div className='answer-line'>
-						{(choosedHero || choosedHero === 0 ) && roundNotFinished ?  
-						<Button variant="contained" color="primary" 
-							onClick={getAnswer}>Ответить</Button>
-							: ''
-						}
-						{answer ?
-							<div className='answer-response'>
-								{(answer === answers.right) ? 
-									<h3 className='right-answer'>{answer}</h3>
-									:
-									<h3 className='false-answer'>{answer}</h3>
-								}
-								{(answer === answers.fail) ? 
-								<p >Вы ответили 
-									<span className='false-answer'>{randomHeroes[choosedHero].name}</span>, <br />
-									Но правильный ответ 
-									<span className='right-answer'>{randomHeroes[secretHero].name}</span></p>
-								:
-								<p>Отличный ответ!</p>	
-
-							}
-							</div> : ''}
+					<Answer answer={answer} />
 					</div>
 					<div>
 					{choosedHero || choosedHero === 0?  
