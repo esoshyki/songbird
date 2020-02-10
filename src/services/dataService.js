@@ -33,17 +33,18 @@ export default class DataService {
         const roleDataArray = heroesData[role];
         const range = roleDataArray.length - 1;
 
-        const getRandom = () => Math.floor(Math.random() * range)
-        const indexes = new Array(6).fill(-1).map((el, idx, array) => {
+        const getRandom = () => Math.floor(Math.random() * range);
+        const randomHeroes = [];
+        const indexes = new Array(6).fill(0).forEach((_) => {
             let number = getRandom();
-            while (array.includes(number)) {
+            while (randomHeroes.includes(number)) {
                 number = getRandom()
             };
-            return number
+            randomHeroes.push(number)
         })
-        const randomHeroes = indexes.map(el => {
+        console.log(randomHeroes)
+
+        return randomHeroes.map(el => {
             return roleDataArray[el]});
-       
-        return randomHeroes
     }
 } 
