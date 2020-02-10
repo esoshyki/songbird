@@ -1,12 +1,7 @@
-import React, { useState } from 'react';
-import { makeStyles,  withStyles, } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import { Link } from "react-router-dom";
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
+import { Container, Box, Typography, Avatar, TextField, Paper } from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 const useStyles = makeStyles(theme => ({
@@ -20,18 +15,12 @@ const useStyles = makeStyles(theme => ({
 		color: 'wheat !important',
 		fontWeight: '700'
 	},
-	image: {
-		backgroundImage: 'url(https://source.unsplash.com/random)',
-		backgroundRepeat: 'no-repeat',
-		backgroundSize: 'cover',
-		backgroundPosition: 'center',
-	},
 	paperGrid: {
 		background: 'none',
-		color: 'white'
+		color: 'white',
+		marginTop: '20px'
 	},
 	paper: {
-		margin: theme.spacing(8, 4),
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',
@@ -40,14 +29,11 @@ const useStyles = makeStyles(theme => ({
 		padding: '5px 10px'
 	},
 	titlePaper: {
-		margin: theme.spacing(8, 4),
-		display: 'flex',
-		flexDirection: 'column',
-		alignItems: 'center',
-		background: 'none',
 		color: 'wheat',
-		padding: '5px 10px',
-		margin: '0 auto'
+		fontSize: '1.5rem',
+		fontWeight: '700',
+		textAlign: 'center',
+		margin: theme.spacing(3, 3)
 	},
 	avatar: {
 		margin: theme.spacing(1),
@@ -58,16 +44,25 @@ const useStyles = makeStyles(theme => ({
 	},
 	submit: {
 		margin: theme.spacing(3, 0, 2),
+		background: 'none',
+		color: 'white',
+		padding: '10px',
+		border: '1px solid wheat',
+		width: '200px',
+		'&:hover': {
+			cursor: 'pointer'
+		}
 	},
-	snack: {
-		backgroundColor: theme.palette.error.dark,
-	},
-	closeSnack: {
-		padding: theme.spacing(0.5),
+	submitText: {
+		textDecoration: 'none',
+		color: 'wheat',
+		fontWeight: '700',
+		fontSize: '1.2rem'
 	},
 	textField: {
 		color: 'wheat !important',
-		background: 'none'
+		background: 'none',
+		marginBottom: theme.spacing(1)
 	}
 }));
 
@@ -79,8 +74,8 @@ export default function Home(props) {
 	}
 
 	return (
-    <Grid container component="main" className={classes.root}>
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square className={classes.paperGrid} >
+    <Container maxWidth="sm" className={classes.root}>
+      <Box component={Paper} elevation={6} square className={classes.paperGrid} >
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
@@ -89,15 +84,12 @@ export default function Home(props) {
 						Введите имя
           </Typography>
             <TextField className={classes.textField}
-              variant="outlined"
+              variant="filled"
               margin="normal"
-              required
               fullWidth
               id="name"
               label="Введите имя"
               name="name"
-              autoComplete="name"
-			  			autoFocus
 			  			onChange={handleChangeName}
 			  			InputLabelProps={{
         				className: classes.textField
@@ -108,21 +100,16 @@ export default function Home(props) {
 							/>
 
 							<Link to='/pages/game'>
-								<Button
-									fullWidth
-									variant="contained"
-									color="primary"
-									className={classes.submit}>
-									Начать игру
-								</Button>
+								<button	className={classes.submit}>
+									<span className={classes.submitText}>Начать игру</span>
+								</button>
 							</Link>
+			        <Typography component="h1" variant="h2" className={classes.titlePaper}>
+								Викторина! Угадай героя Доты по голосу
+			        </Typography>      
+
         </div>
-      </Grid>
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square className={classes.titlePaper} >
-        <Typography component="h1" variant="h2">
-					Викторина! Угадай героя Доты по голосу
-        </Typography>      
-      </Grid>
-    </Grid>
+      </Box>
+    </Container>
 	)
 }

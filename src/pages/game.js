@@ -27,28 +27,41 @@ const answers = {
 
 const useStyles = makeStyles({
 	root: {
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'center',
+		justifyContent: 'flex-start',
 		minHeight: '100vh',
 		padding: '0 20px'
 	},
 	game: {
     display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'top'
+    flexDirection: 'column',
+    justifyContent: 'center',
+    width: '100%'
 	},
 	gameHeader: {
 		display: 'flex',
-		justifyContent: 'space-around',
+		flexWrap: 'wrap',
+		justifyContent: 'flex-start',
 		alignItems: 'center',
 		padding: '5px'
 	},
 	gameInfo: {
 		display: 'flex',
+		flexWrap: 'wrap',
 		flexDirection: 'row',
 		justifyContent: 'space-around',
 		alignItems: 'center',
-		fontSize: '2rem',
+		fontSize: '1.5rem',
 		margin: '10px 0'
+	},
+	heroesChoise: {
+		display: 'flex',
+		flexWrap: 'wrap',
+		flexDirection: 'row',
+		justifyContent: 'space-around',
+		alignItems: 'center',
 	},
 	answerLine: {
 		display: 'flex',
@@ -82,9 +95,9 @@ const useStyles = makeStyles({
 		padding: '0 10px',
 		backgroundColor: '#008966',
 		color: 'white',
-		minWidth: '100px',
+		width: '100px',
 		height: '30px',
-		lineHeight: '0'
+		lineHeight: '0',
 	},
 		currentLevelTitle: {
 		display: 'flex',
@@ -94,13 +107,14 @@ const useStyles = makeStyles({
 		padding: '0 10px',
 		backgroundColor: '#00bc8c',
 		color: 'white',
-		minWidth: '100px',
+		width: '100px',
 		height: '30px',
 		lineHeight: '0'
 	},
 	nextRoundButton: {
 		backgroundColor: '#4caf50',
-		color: 'white'
+		color: 'white',
+		margin: '0 auto',
 	},
 	wrongAnswer: {
 		color: 'red',
@@ -111,6 +125,12 @@ const useStyles = makeStyles({
 	},
 	disabledButton: {
 		opacity: 0.2
+	},
+	buttonContainer: {
+		width: '100%',
+		display: 'flex',
+		justifyContent: 'center',
+		marginBottom: '15px'
 	}
 
 })
@@ -217,15 +237,17 @@ export default function Game(props) {
 				<div className={props.round >= 8 ? classes.currentLevelTitle : classes.levelTitle}>Лесники</div>
 			</div>
 			<div className={classes.gameInfo}>
-				<div >Игрок: <span className={classes.playerAndRound}>{props.gamer}</span></div>
-				<div >Раунд: <span className={classes.playerAndRound}>{props.round}</span>/8</div>
-				<div >Счет: <span className={props.score >= 0 ? classes.positiveScore : classes.negativeScore}>{props.score}</span></div>
+				<p >Игрок: <span className={classes.playerAndRound}>{props.gamer ? props.gamer : 'Аноним'}</span><br />
+				 Раунд: <span className={classes.playerAndRound}>{props.round}</span>/8
+				 Счет: <span className={props.score >= 0 ? classes.positiveScore : classes.negativeScore}>{props.score}</span></p>
 			</div>
-			<NextRoundButton 
-
-			/>
+			<div className={classes.buttonContainer}>
+				<NextRoundButton/>
+			</div>
 			<div className={classes.game}>
-				<div>
+				{secretHero || secretHero === 0 ? 
+					<AudioPlayer audio={sound}/> : ''}
+				<div className={classes.heroesChoise}>
 				{(randomHeroes) ? randomHeroes.map((hero, idx) => (
 					<CheckListLabel 
 						name={hero.name} 
@@ -243,9 +265,7 @@ export default function Game(props) {
 				</div>
 				<div>
 
-						{secretHero || secretHero === 0 ? 
-						<AudioPlayer audio={sound}/> : ''
-						}
+						
 					<div className={classes.answerLine}>
 						<Answer answer={answer} />
 					</div>

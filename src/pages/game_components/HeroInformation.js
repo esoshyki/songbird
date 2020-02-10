@@ -3,6 +3,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import AudioPlayer from './AudioPlayer';
 
 const useStyles = makeStyles({
+    root: {
+      width: '100%',
+      display: 'flex',
+      flexWrap: 'wrap',
+      flexDirection: 'row'
+    },
     image: {
         float: 'left',
         marginRight: '20px',
@@ -14,8 +20,7 @@ const useStyles = makeStyles({
     },
     cardHeader: {
         display: 'flex',
-        flexDirection: 'row',
-        height: '100px',
+        flexDirection: 'column',
         padding: '5px 20px',
         alignItems: 'center'
     },
