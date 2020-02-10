@@ -33,7 +33,7 @@ const useStyles = makeStyles({
 export default function HeroInformation(props) {
 
     const classes = useStyles({})
-    if (props.remove) {
+    if (props.remove && props.notFirst) {
         return null
     } else {
     return(

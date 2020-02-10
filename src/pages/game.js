@@ -150,7 +150,7 @@ export default function Game(props) {
 	const [choosedAudio, setChoosedAudio] = useState(null);
 	const chooseSecretHero = () => Math.floor(Math.random() * 5)
 
-	const startNewLvL = () => {
+	const startNewLvL = async () => {
 		setMadeAnswers(startClasses);
 		setRemoveHeroInformation(true);
 		const round = props.round + 1;
@@ -159,7 +159,7 @@ export default function Game(props) {
 			setGameFinished(true)
 		}
 		else {
-			const heroes = dataService.getRandomHeroes(roles[round]);
+			const heroes = await dataService.getRandomHeroes(roles[round]);
 			const secretID = chooseSecretHero();
 			setRandomHeroes(heroes);
 			setSecretHero(secretID);
@@ -256,7 +256,10 @@ export default function Game(props) {
 							name={randomHeroes[choosedHero].name} 
 							image={randomHeroes[choosedHero].image} 
 							description={randomHeroes[choosedHero].description}
-							sound={choosedAudio} /> : ''}
+							sound={choosedAudio}
+							notFirst={answer == null ? true : false}
+							 /> : ''}
+							
 					</div>
 				</div>
 			</div>

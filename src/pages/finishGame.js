@@ -66,9 +66,9 @@ export default function FinishGame(props) {
   return (
     redirect ? <Redirect to='/' />  : 
     <div className={classes.root}>
-      <h3>Hey, <span className={classes.highScore}>{props.gamer}</span>, <br/>
-      you have earned <span className={chooseStyle()}>{props.score} </span> 
-      points from <span className={classes.highScore}>40</span> maximum</h3>
+      <h3>Эй, <span className={classes.highScore}>{props.gamer}</span>, <br/>
+      Ты заработал <span className={chooseStyle()}>{props.score} </span> 
+      баллов из <span className={classes.highScore}>40</span> возможных</h3>
     <Link to='/'>
       <Button
 		  variant="contained"
