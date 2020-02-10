@@ -8,7 +8,8 @@ const answers = {
 
 const useStyles = makeStyles({
   root: {
-    fontSize: '1.5rem'
+    fontSize: '1.5rem',
+    lineHeight: '0'
   },
   right: {
     color: 'green'

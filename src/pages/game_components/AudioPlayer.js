@@ -1,10 +1,18 @@
 import React from 'react';
-import './AudioPlayer.sass';
+import { makeStyles } from '@material-ui/core/styles'
+
+const useStyles = makeStyles({
+	root: {
+		background: 'none'
+	}
+})
 
 export default function AudioPlayer(props) {
+		const classes = useStyles({})
+
     return (
         <div className='audio-player'>
-            <audio controls src={props.audio} />
+            <audio className={classes.root} controls src={props.audio} />
         </div>
     )
 }

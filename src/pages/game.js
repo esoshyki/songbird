@@ -7,7 +7,6 @@ import AudioPlayer from './game_components/AudioPlayer';
 import Answer from './game_components/Answer'
 import { makeStyles } from '@material-ui/core/styles'
 import { Redirect } from 'react-router-dom'
-import './game.sass'
 const dataService = new DataService();
 
 const roles = {
@@ -31,12 +30,31 @@ const useStyles = makeStyles({
 		minHeight: '100vh',
 		padding: '0 20px'
 	},
+	game: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'top'
+	},
+	gameHeader: {
+		display: 'flex',
+		justifyContent: 'space-around',
+		alignItems: 'center',
+		padding: '5px'
+	},
 	gameInfo: {
 		display: 'flex',
 		flexDirection: 'row',
 		justifyContent: 'space-around',
 		alignItems: 'center',
-		fontSize: '2rem'
+		fontSize: '2rem',
+		margin: '10px 0'
+	},
+	answerLine: {
+		display: 'flex',
+		flexDirection: 'row',
+		justifyContent: 'flex-start',
+		alignItems: 'center'
 	},
 	playerAndRound: {
 		color: 'green',
@@ -125,19 +143,29 @@ export default function Game(props) {
 	const [redirect, setRedirect] = useState(false);
 	const [answer, setAnswer] = useState(null)
 	const [roundFinished, setRoundFinished] = useState(true);
-	const [madeAnswers, setMadeAnswers] = useState(startClasses)
- 
+	const [madeAnswers, setMadeAnswers] = useState(startClasses);
+	const [scoreCount, setScoreCount] = useState(5);
+	const [gameFinished, setGameFinished] = useState(false);
+	const [removeHeroInformation, setRemoveHeroInformation] = useState(false);
+	const [choosedAudio, setChoosedAudio] = useState(null);
 	const chooseSecretHero = () => Math.floor(Math.random() * 5)
 
 	const startNewLvL = () => {
 		setMadeAnswers(startClasses);
+		setRemoveHeroInformation(true);
 		const round = props.round + 1;
-		const heroes = dataService.getRandomHeroes(roles[round]);
-		const secretID = chooseSecretHero();
+		if (round > Object.keys(roles).length) {
+			setRedirect(true)
+			setGameFinished(true)
+		}
+		else {
+			const heroes = dataService.getRandomHeroes(roles[round]);
+			const secretID = chooseSecretHero();
+			setRandomHeroes(heroes);
+			setSecretHero(secretID);
+			setSound(heroes[secretID].sound)
+		}
 		props.setRound(round);
-		setRandomHeroes(heroes);
-		setSecretHero(secretID);
-		setSound(heroes[secretID].sound)
 		setAnswer(null)
 		setRoundFinished(false)
 	}
@@ -145,18 +173,23 @@ export default function Game(props) {
 	const handleAnswer = (hero) => {
 		const answersObject = Object.assign({}, madeAnswers);
 		setChosedHero(hero);
+		setChoosedAudio(randomHeroes[hero].sound)
+		console.log(randomHeroes)
 		if (hero == secretHero) {
 			setAnswer(answers.right)
 			setRoundFinished(true)
-			props.setScore(props.score+5)
+			props.setScore(props.score+scoreCount);
 			answersObject[hero] = classesStatus.rightAnswer;
+			setScoreCount(5)
 		}
 		else {
-			setAnswer(answers.fail)
-			props.setScore(props.score-5)
+			setAnswer(answers.fail);
+			setScoreCount(scoreCount - 1);
 			answersObject[hero] = classesStatus.wrongAnswer;
+			setRemoveHeroInformation(false)
 		}
 		setMadeAnswers(answersObject);
+		console.log(choosedAudio)
 	}
 
 	const NextRoundButton = () => {
@@ -164,34 +197,34 @@ export default function Game(props) {
 			<Button 
 		  variant="contained"
 			color="primary"
-			onClick={roundFinished ? startNewLvL : null}
+			onClick={roundFinished && !gameFinished ? startNewLvL : null}
 			className={roundFinished ? null : classes.disabledButton}>
-				Start next round
+				{props.round < 8 ? 'Начать следующий раунд' : 'Заверишть игру'}
 			</Button>
 		)
 	}
 
 	return (redirect) ? <Redirect to='/pages/finishGame' /> : (
 		<div className={classes.root}>
-			<div className='game-header'>
-				<div className={props.round === 1 ? classes.currentLevelTitle : classes.levelTitle}>Силовики</div>
-				<div className={props.round === 2 ? classes.currentLevelTitle : classes.levelTitle}>Ловкачи</div>
-				<div className={props.round === 3 ? classes.currentLevelTitle : classes.levelTitle}>Маги</div>
-				<div className={props.round === 4 ? classes.currentLevelTitle : classes.levelTitle}>Керри</div>
-				<div className={props.round === 5 ? classes.currentLevelTitle : classes.levelTitle}>Саппорты</div>
-				<div className={props.round === 6 ? classes.currentLevelTitle : classes.levelTitle}>Мидеры</div>
-				<div className={props.round === 7 ? classes.currentLevelTitle : classes.levelTitle}>Хардлайнеры</div>
-				<div className={props.round === 8 ? classes.currentLevelTitle : classes.levelTitle}>Лесники</div>
+			<div className={classes.gameHeader}>
+				<div className={props.round >= 1 ? classes.currentLevelTitle : classes.levelTitle}>Силовики</div>
+				<div className={props.round >= 2 ? classes.currentLevelTitle : classes.levelTitle}>Ловкачи</div>
+				<div className={props.round >= 3 ? classes.currentLevelTitle : classes.levelTitle}>Маги</div>
+				<div className={props.round >= 4 ? classes.currentLevelTitle : classes.levelTitle}>Керри</div>
+				<div className={props.round >= 5 ? classes.currentLevelTitle : classes.levelTitle}>Саппорты</div>
+				<div className={props.round >= 6 ? classes.currentLevelTitle : classes.levelTitle}>Мидеры</div>
+				<div className={props.round >= 7 ? classes.currentLevelTitle : classes.levelTitle}>Хардлайнеры</div>
+				<div className={props.round >= 8 ? classes.currentLevelTitle : classes.levelTitle}>Лесники</div>
 			</div>
 			<div className={classes.gameInfo}>
-				<div >Player: <span className={classes.playerAndRound}>{props.gamer}</span></div>
-				<div >Round: <span className={classes.playerAndRound}>{props.round}</span></div>
-				<div >Score: <span className={props.score >= 0 ? classes.positiveScore : classes.negativeScore}>{props.score}</span></div>
+				<div >Игрок: <span className={classes.playerAndRound}>{props.gamer}</span></div>
+				<div >Раунд: <span className={classes.playerAndRound}>{props.round}</span>/8</div>
+				<div >Счет: <span className={props.score >= 0 ? classes.positiveScore : classes.negativeScore}>{props.score}</span></div>
 			</div>
 			<NextRoundButton 
 
 			/>
-			<div className='game'>
+			<div className={classes.game}>
 				<div>
 				{(randomHeroes) ? randomHeroes.map((hero, idx) => (
 					<CheckListLabel 
@@ -213,16 +246,17 @@ export default function Game(props) {
 						{secretHero || secretHero === 0 ? 
 						<AudioPlayer audio={sound}/> : ''
 						}
-					<div className='answer-line'>
-					<Answer answer={answer} />
+					<div className={classes.answerLine}>
+						<Answer answer={answer} />
 					</div>
 					<div>
 					{choosedHero || choosedHero === 0?  
 						<HeroInformation 
+							remove={removeHeroInformation}
 							name={randomHeroes[choosedHero].name} 
 							image={randomHeroes[choosedHero].image} 
 							description={randomHeroes[choosedHero].description}
-							audio={randomHeroes[choosedHero].sound} /> : ''}
+							sound={choosedAudio} /> : ''}
 					</div>
 				</div>
 			</div>

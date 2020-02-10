@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import logo from './logo.svg';
-import './App.sass';
 import { Container, Button } from '@material-ui/core'
 import Game from './pages/game';
 import Home from './pages/home';
@@ -15,11 +14,17 @@ import Background from './images/bg.jpg'
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme => ({
+  root: {
+    background: 'black',
+    color: 'white',
+    width: '100%'
+  },
   header: {
     backgroundImage: 'url(https://thatshelf.com/wp-content/uploads/2015/09/Dota-2-1900x560.jpg)',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
-    paddingLeft: '30px'
+    paddingLeft: '30px',
+    borderBottom: '1px solid white'
   },
   headerIcon: {
     height: '64px',
@@ -48,6 +53,7 @@ function App() {
 
   return (
     <Router>
+      <div className={classes.root}>
       <Container fixed>
         <header className={classes.header}>
           <Link to="/" onClick={handleClick}>
@@ -69,6 +75,7 @@ function App() {
           </Switch>
         </main>
       </Container>
+      </div>
     </Router>
   );
 }
