@@ -104,6 +104,15 @@ const classesStatus = {
     rightAnswer: 'right-answer',
 }
 
+const startClasses = {
+	0: classesStatus.noAnswer,
+	1: classesStatus.noAnswer,
+	2: classesStatus.noAnswer,
+	3: classesStatus.noAnswer,
+	4: classesStatus.noAnswer,
+	5: classesStatus.noAnswer,
+}
+
 
 export default function Game(props) {
 
@@ -115,11 +124,13 @@ export default function Game(props) {
 	const [sound, setSound ] = useState();
 	const [redirect, setRedirect] = useState(false);
 	const [answer, setAnswer] = useState(null)
-	const [roundFinished, setRoundFinished] = useState(true)
+	const [roundFinished, setRoundFinished] = useState(true);
+	const [madeAnswers, setMadeAnswers] = useState(startClasses)
  
 	const chooseSecretHero = () => Math.floor(Math.random() * 5)
 
 	const startNewLvL = () => {
+		setMadeAnswers(startClasses);
 		const round = props.round + 1;
 		const heroes = dataService.getRandomHeroes(roles[round]);
 		const secretID = chooseSecretHero();
@@ -132,16 +143,20 @@ export default function Game(props) {
 	}
 
 	const handleAnswer = (hero) => {
+		const answersObject = Object.assign({}, madeAnswers);
 		setChosedHero(hero);
 		if (hero == secretHero) {
 			setAnswer(answers.right)
 			setRoundFinished(true)
 			props.setScore(props.score+5)
+			answersObject[hero] = classesStatus.rightAnswer;
 		}
 		else {
 			setAnswer(answers.fail)
 			props.setScore(props.score-5)
+			answersObject[hero] = classesStatus.wrongAnswer;
 		}
+		setMadeAnswers(answersObject);
 	}
 
 	const NextRoundButton = () => {
@@ -189,6 +204,7 @@ export default function Game(props) {
 						secretHero={secretHero}
 						roundFinished={roundFinished}
 						round={props.round}
+						class={madeAnswers[idx]}
 						/>
 				)) : null}
 				</div>

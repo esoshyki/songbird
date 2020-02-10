@@ -33,7 +33,6 @@ export default function CheckListLabel(props) {
         if (props.index == props.secretHero) {
             setClasss(classesStatus.rightAnswer)
             setRound(props.round + 1);
-            console.log(round)
         } else {
             setClasss(classesStatus.wrongAnswer)            
         }
@@ -41,7 +40,7 @@ export default function CheckListLabel(props) {
     }
 
     return(
-        <div className={classs}
+        <div className={props.class}
           onBlur={handleBlur}
           onClick={props.roundFinished ? null : handleClick}
         >

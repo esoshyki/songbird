@@ -1,14 +1,27 @@
 import React, {useState} from 'react';
-import './AudioPlayer.sass';
+import { makeStyles } from '@material-ui/core/styles';
+
+const answers = {
+	right: 'ВЕРНО!',
+	fail: 'НЕВЕРНО!'
+}
+
+const useStyles = makeStyles({
+  root: {
+    fontSize: '1.5rem'
+  },
+  right: {
+    color: 'green'
+  },
+  fail: {
+    color: 'red'
+  }
+})
 
 export default function  Answer(props) {
-  const [answer, setAnswer ] = useState(props.answer);
-  
-  const handleChange = () => {
-    setAnswer(props.answer)
-  }
+  const classes = useStyles({})
 
-  return (<div>
-    <h3 onChange={handleChange}>{props.answer}</h3>
+  return (<div className={classes.root}>
+    <h3 className={props.answer === answers.right ? classes.right : classes.fail}>{props.answer}</h3>
   </div>)
 }
