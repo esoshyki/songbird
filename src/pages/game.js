@@ -173,13 +173,24 @@ export default function Game(props) {
 	}
 
 	const NextRoundButton = () => {
+		const ButtonInner = () => {
+			if (props.round === 0) {
+				return 'Начать первый раунд'
+			} else if (props.round === 8) {
+				return 'Завершить игру'
+			} else {
+				return 'Начать следующий раунд'
+			}
+		}
+
 		return (
 			<Button 
 		  variant="contained"
 			color="primary"
 			onClick={roundFinished && !gameFinished ? startNewLvL : null}
 			className={roundFinished ? null : classes.disabledButton}>
-				{props.round < 8 ? 'Начать следующий раунд' : 'Заверишть игру'}
+				<ButtonInner />
+				{/* {props.round < 8 ? 'Начать следующий раунд' : 'Заверишть игру'} */}
 			</Button>
 		)
 	}
