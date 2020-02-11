@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Button } from '@material-ui/core';
 import DataService from '../../services/dataService';
 import { makeStyles } from '@material-ui/core/styles';
-import './CheckListLabel.sass';
 
 const dataService = new DataService;
 

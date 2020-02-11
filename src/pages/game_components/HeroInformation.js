@@ -9,12 +9,6 @@ const useStyles = makeStyles({
       flexWrap: 'wrap',
       flexDirection: 'row'
     },
-    image: {
-        float: 'left',
-        marginRight: '20px',
-        height: '100px',
-        width: '100px',
-    },
     article: {
         textAlign: 'justify'
     },
@@ -43,11 +37,11 @@ export default function HeroInformation(props) {
     } else {
     return(
       <div className='hero-information'>
-          <h3 className={classes.title}>{props.name}</h3>
-          <div className={classes.cardHeader}>
+          <div className='_header'>
               <img src={props.image} alt={props.name} className={classes.image}/>
               <AudioPlayer audio={props.sound} />
           </div>
+          <h3 className='_hero-name'>{props.name}</h3>
           <article>
               {props.description}
           </article>

@@ -42,17 +42,6 @@ const useStyles = makeStyles(theme => ({
 		width: '100%', // Fix IE 11 issue.
 		marginTop: theme.spacing(1),
 	},
-	submit: {
-		margin: theme.spacing(3, 0, 2),
-		background: 'none',
-		color: 'white',
-		padding: '10px',
-		border: '1px solid wheat',
-		width: '200px',
-		'&:hover': {
-			cursor: 'pointer'
-		}
-	},
 	submitText: {
 		textDecoration: 'none',
 		color: 'wheat',
@@ -100,7 +89,7 @@ export default function Home(props) {
 							/>
 
 							<Link to='/pages/game'>
-								<button	className={classes.submit}>
+								<button	className='start-game'>
 									<span className={classes.submitText}>Начать игру</span>
 								</button>
 							</Link>

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import logo from './logo.svg';
 import { Container, Button } from '@material-ui/core'
 import Game from './pages/game';
 import Home from './pages/home';
@@ -11,35 +10,11 @@ import {
   Link
 } from "react-router-dom";
 import Background from './images/bg.jpg'
-import { makeStyles } from '@material-ui/core/styles'
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    background: 'black',
-    color: 'white',
-    width: '100%'
-  },
-  header: {
-    backgroundImage: 'url(https://thatshelf.com/wp-content/uploads/2015/09/Dota-2-1900x560.jpg)',
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'cover',
-    paddingLeft: '30px',
-    borderBottom: '1px solid white'
-  },
-  headerIcon: {
-    height: '64px',
-    width: '64px',
-    backgroundImage: 'url(https://in-gamestore.com/uploads/games/dota-icon.svg)',
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    margin: 0
-  }
-}))
+import './styles/style.sass'
 
 function App() {
 
-  const classes = useStyles({})
 
   const [score, setScore] = useState(0);
   const [round, setRound] = useState(0);
@@ -53,11 +28,11 @@ function App() {
 
   return (
     <Router>
-      <div className={classes.root}>
+      <div className='container'>
       <Container fixed>
-        <header className={classes.header}>
+        <header className='header'>
           <Link to="/" onClick={handleClick}>
-            <div className={classes.headerIcon} />
+            <div className='header-icon' />
           </Link>
         </header>
         <main 

@@ -34,35 +34,6 @@ const useStyles = makeStyles({
 		minHeight: '100vh',
 		padding: '0 20px'
 	},
-	game: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    width: '100%'
-	},
-	gameHeader: {
-		display: 'flex',
-		flexWrap: 'wrap',
-		justifyContent: 'flex-start',
-		alignItems: 'center',
-		padding: '5px'
-	},
-	gameInfo: {
-		display: 'flex',
-		flexWrap: 'wrap',
-		flexDirection: 'row',
-		justifyContent: 'space-around',
-		alignItems: 'center',
-		fontSize: '1.5rem',
-		margin: '10px 0'
-	},
-	heroesChoise: {
-		display: 'flex',
-		flexWrap: 'wrap',
-		flexDirection: 'row',
-		justifyContent: 'space-around',
-		alignItems: 'center',
-	},
 	answerLine: {
 		display: 'flex',
 		flexDirection: 'row',
@@ -95,7 +66,6 @@ const useStyles = makeStyles({
 		padding: '0 10px',
 		backgroundColor: '#008966',
 		color: 'white',
-		width: '100px',
 		height: '30px',
 		lineHeight: '0',
 	},
@@ -107,7 +77,6 @@ const useStyles = makeStyles({
 		padding: '0 10px',
 		backgroundColor: '#00bc8c',
 		color: 'white',
-		width: '100px',
 		height: '30px',
 		lineHeight: '0'
 	},
@@ -126,13 +95,6 @@ const useStyles = makeStyles({
 	disabledButton: {
 		opacity: 0.2
 	},
-	buttonContainer: {
-		width: '100%',
-		display: 'flex',
-		justifyContent: 'center',
-		marginBottom: '15px'
-	}
-
 })
 
 
@@ -225,8 +187,8 @@ export default function Game(props) {
 	}
 
 	return (redirect) ? <Redirect to='/pages/finishGame' /> : (
-		<div className={classes.root}>
-			<div className={classes.gameHeader}>
+		<div className='game'>
+			<div className='game-header'>
 				<div className={props.round >= 1 ? classes.currentLevelTitle : classes.levelTitle}>Силовики</div>
 				<div className={props.round >= 2 ? classes.currentLevelTitle : classes.levelTitle}>Ловкачи</div>
 				<div className={props.round >= 3 ? classes.currentLevelTitle : classes.levelTitle}>Маги</div>
@@ -236,18 +198,22 @@ export default function Game(props) {
 				<div className={props.round >= 7 ? classes.currentLevelTitle : classes.levelTitle}>Хардлайнеры</div>
 				<div className={props.round >= 8 ? classes.currentLevelTitle : classes.levelTitle}>Лесники</div>
 			</div>
-			<div className={classes.gameInfo}>
-				<p >Игрок: <span className={classes.playerAndRound}>{props.gamer ? props.gamer : 'Аноним'}</span><br />
-				 Раунд: <span className={classes.playerAndRound}>{props.round}</span>/8
-				 Счет: <span className={props.score >= 0 ? classes.positiveScore : classes.negativeScore}>{props.score}</span></p>
+			<div className='game-info'>
+				<div className='_button-container'>
+					<NextRoundButton/>
+				</div>
+				<div className='_text-information'>
+					<p >Игрок: <span className={classes.playerAndRound}>{props.gamer ? props.gamer : 'Аноним'}</span><br />
+					Раунд: <span className={classes.playerAndRound}>{props.round}</span>/8
+					Счет: <span className={props.score >= 0 ? classes.positiveScore : classes.negativeScore}>{props.score}</span></p>
+				 </div>
 			</div>
-			<div className={classes.buttonContainer}>
-				<NextRoundButton/>
-			</div>
-			<div className={classes.game}>
+
+			<div className='game-body'>
 				{secretHero || secretHero === 0 ? 
 					<AudioPlayer audio={sound}/> : ''}
-				<div className={classes.heroesChoise}>
+				<div className='_hero-field'>
+				<div className='_hero-choise'>
 				{(randomHeroes) ? randomHeroes.map((hero, idx) => (
 					<CheckListLabel 
 						name={hero.name} 
@@ -263,9 +229,7 @@ export default function Game(props) {
 						/>
 				)) : null}
 				</div>
-				<div>
-
-						
+				<div className='one-hero-part'>
 					<div className={classes.answerLine}>
 						<Answer answer={answer} />
 					</div>
@@ -281,6 +245,7 @@ export default function Game(props) {
 							 /> : ''}
 							
 					</div>
+				</div>
 				</div>
 			</div>
 		</div>

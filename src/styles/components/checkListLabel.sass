@@ -1,14 +1,10 @@
 div.wrong-answer, div.right-answer, div.no-answer
-    display: flex
-    flex-direction: column
-    justify-content: flex-start
-    align-items: center
-    margin: 5px
+    +flex(row)
     opacity: 1
     img 
         width: 80px
         height: 80px
-        margin: 5px 10px
+        margin: 3px 10px
     &:hover
         color: yellowgreen
         cursor: pointer
@@ -16,7 +12,7 @@ div.wrong-answer, div.right-answer, div.no-answer
             opacity: 0.5
 
     p 
-        font-size: 1.2rem
+        font-size: 1rem
     p.not-blure 
         color: white
     p.blured

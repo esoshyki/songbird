@@ -1,0 +1,24 @@
+=flex($fd: column, $jc: center, $ai: center)
+    display: flex
+    flex-direction: $fd
+    justify-content: $jc
+    align-items: $ai
+
+=grid($col: 1fr, $jc: space-between, $ai: center)
+    display: grid
+    grid-template-columns: $col
+    justify-content: $jc
+    align-items: $ai
+
+=laptop
+    @media screen and ( max-width: 1150px )
+        @content
+
+=mobile 
+    @media screen and ( max-width: 650px )
+        @content
+        
+=shadow 
+    -webkit-box-shadow: 10px 0px 29px 0px rgba(0,0,0,0.75)
+    -moz-box-shadow: 10px 0px 29px 0px rgba(0,0,0,0.75)
+    box-shadow: 10px 0px 29px 0px rgba(0,0,0,0.75)
