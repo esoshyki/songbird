@@ -18,18 +18,6 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 
 const useStyles = makeStyles({
-  root: {
-    height: '100vh',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    fontSize: '2rem',
-    backgroundImage: 'url(https://images5.alphacoders.com/387/thumb-1920-387546.jpg)',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat'
-  },
   lowScore: {
     color: 'red'
   },
@@ -65,7 +53,7 @@ export default function FinishGame(props) {
 
   return (
     redirect ? <Redirect to='/' />  : 
-    <div className={classes.root}>
+    <div className='finish-game'>
       <h3>Эй, <span className={classes.highScore}>{props.gamer}</span>, <br/>
       Ты заработал <span className={chooseStyle()}>{props.score} </span> 
       баллов из <span className={classes.highScore}>40</span> возможных</h3>
@@ -73,7 +61,7 @@ export default function FinishGame(props) {
       <Button
 		  variant="contained"
 			color="primary"
-      className={classes.submit}
+      className='_button'
       onClick={handleClick}
 			>
         Вернуться

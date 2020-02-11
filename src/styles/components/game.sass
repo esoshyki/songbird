@@ -10,10 +10,16 @@
         width: 100%
         +laptop 
             +grid(repeat(4, 1fr))
+            font-size: 0.9rem
+        +mobile
+            font-size: 0.8rem
 
     .game-info
         width: 100%
         +grid(repeat(2, 1fr))
+        +mobile
+            +flex(column)
+            margin-top: 10px
 
         ._button-container
             margin: 0 auto
@@ -29,10 +35,14 @@
     .game-body
         width: 100%
         +flex(column, flex-start, center)
+        padding: 0 5px
+        box-sizing: border-box
 
         .audio-player
-            width: 200px
+            width: 500px
             height: 80px
+            +mobile
+                width: 100%
 
             audio 
                 width: 100%
@@ -42,9 +52,18 @@
             width: 100%
             padding: 0 20px
             +flex(row, flex-start, flex-start)
+            +laptop
+                +flex(column)
+            +mobile
+                +flex(column)
             ._hero-choise
                 +flex(column, flex-start, flex-start)
                 min-width: 250px
+                +laptop
+                    +grid(repeat(6, 1fr))
+                +mobile
+                    +grid(repeat(3, 1fr))
+            
 
             .one-hero-part
                 +flex(column)
@@ -54,10 +73,15 @@
                         +flex(row, space-around, baseline)
                         width: 350px
                         margin: 0 auto
+                        +mobile
+                            width: 100%
                         img 
                             width: 100px
                             height: 100px
                             border: 1px solid wheat
+                            margin-right: 20px
+                            +mobile
+                                margin-right: 5px
 
                     ._hero-name
                         text-align: center
@@ -68,6 +92,8 @@
                     article 
                         color: wheat
                         padding-bottom: 20px
+                        padding: 0 10px 20px 10px
+                            
 
 
 

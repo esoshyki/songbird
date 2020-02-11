@@ -22,3 +22,18 @@
     -webkit-box-shadow: 10px 0px 29px 0px rgba(0,0,0,0.75)
     -moz-box-shadow: 10px 0px 29px 0px rgba(0,0,0,0.75)
     box-shadow: 10px 0px 29px 0px rgba(0,0,0,0.75)
+
+=button 
+    border: 1px solid wheat
+    color: white
+    background: black
+    width: 150px
+    height: 50px
+    &:hover
+        border: 1px solid yellowgreen
+        cursor: pointer
+        +shadow
+        span
+            color: yellowgreen
+    span 
+        font-weight: 700

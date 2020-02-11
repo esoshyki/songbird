@@ -1,10 +1,20 @@
 div.wrong-answer, div.right-answer, div.no-answer
     +flex(row)
     opacity: 1
+    +laptop
+        +flex(column)
+    +mobile
+        +flex(row, flex-start)
     img 
         width: 80px
         height: 80px
         margin: 3px 10px
+        +laptop
+            margin: 0
+            border: 1px solid wheat
+        +mobile
+            width: 65px
+            height: 65px
     &:hover
         color: yellowgreen
         cursor: pointer
@@ -13,6 +23,11 @@ div.wrong-answer, div.right-answer, div.no-answer
 
     p 
         font-size: 1rem
+        +laptop
+            display: none
+            font-size: 0.8rem
+        +mobile 
+            font-size: 0.7rem
     p.not-blure 
         color: white
     p.blured
