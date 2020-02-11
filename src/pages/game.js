@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@material-ui/core'
 import DataService from '../services/dataService';
 import CheckListLabel from './game_components/CheckListLabel';
@@ -156,8 +156,7 @@ export default function Game(props) {
 		const answersObject = Object.assign({}, madeAnswers);
 		setChosedHero(hero);
 		setChoosedAudio(randomHeroes[hero].sound)
-		console.log(randomHeroes)
-		if (hero == secretHero) {
+		if (hero === secretHero) {
 			setAnswer(answers.right)
 			setRoundFinished(true)
 			props.setScore(props.score+scoreCount);
@@ -171,7 +170,6 @@ export default function Game(props) {
 			setRemoveHeroInformation(false)
 		}
 		setMadeAnswers(answersObject);
-		console.log(choosedAudio)
 	}
 
 	const NextRoundButton = () => {

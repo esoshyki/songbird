@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Button } from '@material-ui/core'
+import { Container } from '@material-ui/core'
 import Game from './pages/game';
 import Home from './pages/home';
 import FinishGame from './pages/finishGame';
