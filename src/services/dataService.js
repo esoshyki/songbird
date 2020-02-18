@@ -30,6 +30,7 @@ export default class DataService {
     }
 
     getRandomHeroes(role) {
+        console.log(role)
         const roleDataArray = heroesData[role];
         const range = roleDataArray.length - 1;
 

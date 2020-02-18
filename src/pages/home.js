@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Link } from "react-router-dom";
 import { Container, Box, Typography, Avatar, TextField, Paper } from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import { connect } from 'react-redux'
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -52,14 +53,17 @@ const useStyles = makeStyles(theme => ({
 		color: 'wheat !important',
 		background: 'none',
 		marginBottom: theme.spacing(1)
+	},
+	green: {
+		color: 'green'
 	}
 }));
 
-export default function Home(props) {
+const Home = ({setName, user}) => {
 	const classes = useStyles({});
 
 	const handleChangeName = ({target}) => {
-		props.setGamer(target.value)
+		setName(target.value)
 	}
 
 	return (
@@ -70,7 +74,7 @@ export default function Home(props) {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5" className={classes.title}>
-						Введите имя
+						{user ? <p>Привет <span className={classes.green}>{user}</span>!</p>: 'Введите имя'}
           </Typography>
             <TextField className={classes.textField}
               variant="filled"
@@ -102,3 +106,15 @@ export default function Home(props) {
     </Container>
 	)
 }
+
+const mapStateProps = state => ({
+	user: state.user
+})
+
+const mapDispatchToProps = dispatch => {
+	return {
+		setName: (name) => dispatch({type: 'SET_NAME', payload: name})
+	}
+}
+
+export default connect(mapStateProps, mapDispatchToProps)(Home);

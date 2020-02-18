@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect  } from 'react';
 import { Button } from '@material-ui/core'
 import DataService from '../services/dataService';
 import CheckListLabel from './game_components/CheckListLabel';
@@ -6,7 +6,9 @@ import HeroInformation from './game_components/HeroInformation';
 import AudioPlayer from './game_components/AudioPlayer';
 import Answer from './game_components/Answer'
 import { makeStyles } from '@material-ui/core/styles'
-import { Redirect } from 'react-router-dom'
+import { Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+
 const dataService = new DataService();
 
 const roles = {
@@ -114,7 +116,7 @@ const startClasses = {
 }
 
 
-export default function Game(props) {
+function Game({changeRound, changeScore, endGame, user, score, round}) {
 
 	const classes = useStyles({})
 
@@ -132,26 +134,6 @@ export default function Game(props) {
 	const [choosedAudio, setChoosedAudio] = useState(null);
 	const chooseSecretHero = () => Math.floor(Math.random() * 5)
 
-	const startNewLvL = async () => {
-		setMadeAnswers(startClasses);
-		setRemoveHeroInformation(true);
-		const round = props.round + 1;
-		if (round > Object.keys(roles).length) {
-			setRedirect(true)
-			setGameFinished(true)
-		}
-		else {
-			const heroes = await dataService.getRandomHeroes(roles[round]);
-			const secretID = chooseSecretHero();
-			setRandomHeroes(heroes);
-			setSecretHero(secretID);
-			setSound(heroes[secretID].sound)
-		}
-		props.setRound(round);
-		setAnswer(null)
-		setRoundFinished(false)
-	}
-
 	const handleAnswer = (hero) => {
 		const answersObject = Object.assign({}, madeAnswers);
 		setChosedHero(hero);
@@ -159,7 +141,7 @@ export default function Game(props) {
 		if (hero === secretHero) {
 			setAnswer(answers.right)
 			setRoundFinished(true)
-			props.setScore(props.score+scoreCount);
+			changeScore(scoreCount);
 			answersObject[hero] = classesStatus.rightAnswer;
 			setScoreCount(5)
 		}
@@ -174,20 +156,26 @@ export default function Game(props) {
 
 	const NextRoundButton = () => {
 		const ButtonInner = () => {
-			if (props.round === 0) {
+			if (round === 0) {
 				return 'Начать первый раунд'
-			} else if (props.round === 8) {
+			} else if (round === 8) {
 				return 'Завершить игру'
 			} else {
 				return 'Начать следующий раунд'
 			}
 		}
 
+		const nextRound = () => {
+			const heroesData = dataService.getRandomHeroes(roles[round > 0 ? round : 1]);
+			setRandomHeroes(heroesData)
+			round <=8 ? changeRound() : endGame();
+		}
+
 		return (
 			<Button 
 		  variant="contained"
 			color="primary"
-			onClick={roundFinished && !gameFinished ? startNewLvL : null}
+			onClick={nextRound}
 			className={roundFinished ? null : classes.disabledButton}>
 				<ButtonInner />
 				{/* {props.round < 8 ? 'Начать следующий раунд' : 'Заверишть игру'} */}
@@ -195,26 +183,27 @@ export default function Game(props) {
 		)
 	}
 
+
 	return (redirect) ? <Redirect to='/pages/finishGame' /> : (
 		<div className='game'>
 			<div className='game-header'>
-				<div className={props.round >= 1 ? classes.currentLevelTitle : classes.levelTitle}>Силовики</div>
-				<div className={props.round >= 2 ? classes.currentLevelTitle : classes.levelTitle}>Ловкачи</div>
-				<div className={props.round >= 3 ? classes.currentLevelTitle : classes.levelTitle}>Маги</div>
-				<div className={props.round >= 4 ? classes.currentLevelTitle : classes.levelTitle}>Керри</div>
-				<div className={props.round >= 5 ? classes.currentLevelTitle : classes.levelTitle}>Саппорты</div>
-				<div className={props.round >= 6 ? classes.currentLevelTitle : classes.levelTitle}>Мидеры</div>
-				<div className={props.round >= 7 ? classes.currentLevelTitle : classes.levelTitle}>Хардлайнеры</div>
-				<div className={props.round >= 8 ? classes.currentLevelTitle : classes.levelTitle}>Лесники</div>
+				<div className={round >= 1 ? classes.currentLevelTitle : classes.levelTitle}>Силовики</div>
+				<div className={round >= 2 ? classes.currentLevelTitle : classes.levelTitle}>Ловкачи</div>
+				<div className={round >= 3 ? classes.currentLevelTitle : classes.levelTitle}>Маги</div>
+				<div className={round >= 4 ? classes.currentLevelTitle : classes.levelTitle}>Керри</div>
+				<div className={round >= 5 ? classes.currentLevelTitle : classes.levelTitle}>Саппорты</div>
+				<div className={round >= 6 ? classes.currentLevelTitle : classes.levelTitle}>Мидеры</div>
+				<div className={round >= 7 ? classes.currentLevelTitle : classes.levelTitle}>Хардлайнеры</div>
+				<div className={round >= 8 ? classes.currentLevelTitle : classes.levelTitle}>Лесники</div>
 			</div>
 			<div className='game-info'>
 				<div className='_button-container'>
 					<NextRoundButton/>
 				</div>
 				<div className='_text-information'>
-					<p >Игрок: <span className={classes.playerAndRound}>{props.gamer ? props.gamer : 'Аноним'}</span><br />
-					Раунд: <span className={classes.playerAndRound}>{props.round}</span>/8
-					Счет: <span className={props.score >= 0 ? classes.positiveScore : classes.negativeScore}>{props.score}</span></p>
+					<p >Игрок: <span className={classes.playerAndRound}>{user ? user : 'Аноним'}</span><br />
+					Раунд: <span className={classes.playerAndRound}>{round}</span>/8
+					Счет: <span className={score >= 0 ? classes.positiveScore : classes.negativeScore}>{score}</span></p>
 				 </div>
 			</div>
 
@@ -233,7 +222,7 @@ export default function Game(props) {
 						choosedHero={choosedHero}
 						secretHero={secretHero}
 						roundFinished={roundFinished}
-						round={props.round}
+						round={round}
 						class={madeAnswers[idx]}
 						/>
 				)) : null}
@@ -260,3 +249,19 @@ export default function Game(props) {
 		</div>
 	) 
 }
+
+const mapStateProps = state => ({
+	user: state.user,
+	score: state.score,
+	round: state.round
+})
+
+const mapDispatchToProps = dispatch => {
+	return {
+		changeRound: () => dispatch({type: 'NEXT_ROUND'}),
+		changeScore: (points) => dispatch({type: 'CHANGE_SCORE', payload: points}),
+		endGame: () => dispatch({type: 'END_GAME'})
+	}
+}
+
+export default connect(mapStateProps, mapDispatchToProps)(Game);
